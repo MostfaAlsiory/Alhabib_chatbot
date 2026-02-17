@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ get_setting('app_name', 'Bank AI Assistant') }} - Intelligent AI Support{% endblock %}
+
+{% block content %}
+<main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1>Intelligent AI <br>Assistant</h1>
+                    <p class="lead mb-4">Your personal AI assistant that understands your needs and provides expert guidance for your specific purpose.</p>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('chat.chat_page') }}" class="btn btn-primary btn-lg me-2">
+                            <i class="fas fa-comments me-2"></i>Start Chatting
+                        </a>
+                        <a href="{{ url_for('chat.dashboard') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-th-large me-2"></i>Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg me-2">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 d-none d-md-block text-center">
+                    <i class="fas fa-robot fa-10x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section bg-body">
+        <div class="container">
+            <h2 class="text-center mb-5">Powerful Features</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-comments-dollar fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Expert Assistance</h5>
+                            <p class="card-text">Get expert advice and information tailored to your specific needs and goals.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-brain fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Smart Learning</h5>
+                            <p class="card-text">Train the AI with your specific needs and questions to get personalized responses.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-history fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Conversation History</h5>
+                            <p class="card-text">Keep track of all your conversations with easy access to past interactions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-lock fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Secure & Private</h5>
+                            <p class="card-text">Your information and conversations are kept secure and private within the system.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-file-upload fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Document Training</h5>
+                            <p class="card-text">Upload your own documents to train the AI on your specific data and information.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-tablet-alt fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Mobile Friendly</h5>
+                            <p class="card-text">Access your banking assistant from any device, anywhere, anytime.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works-section py-5 bg-dark text-white">
+        <div class="container">
+            <h2 class="text-center mb-5">How It Works</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="d-flex mb-4">
+                        <div class="me-3">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <h3 class="m-0">1</h3>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Create an Account</h4>
+                            <p>Sign up for a free account to get started with the AI Assistant.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="me-3">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <h3 class="m-0">2</h3>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Start a Conversation</h4>
+                            <p>Ask questions and get immediate answers based on the trained data.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="me-3">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <h3 class="m-0">3</h3>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Train Your Assistant</h4>
+                            <p>Improve the AI's responses by providing custom training data or uploading documents.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <h3 class="m-0">4</h3>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Get Personalized Support</h4>
+                            <p>Enjoy a personalized AI assistant that learns and adapts to your specific needs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section py-5 bg-body">
+        <div class="container text-center">
+            <h2 class="mb-4">Ready to get started?</h2>
+            <p class="lead mb-4">Join thousands of users who are already benefiting from our AI assistant.</p>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('chat.chat_page') }}" class="btn btn-primary btn-lg me-2">
+                    <i class="fas fa-comments me-2"></i>Start Chatting
+                </a>
+            {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-2">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>&copy; 2026 {{ get_setting('app_name', 'Bank AI Assistant') }}. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

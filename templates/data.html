@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Training Data - Bank AI Assistant{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="mb-0">
+                <i class="fas fa-database me-2"></i>Training Data Management
+            </h1>
+            <p class="text-muted small mt-1">Manage and organize your AI training data</p>
+        </div>
+        <a href="{{ url_for('training.training_page') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add More Training Data
+        </a>
+    </div>
+    
+    <!-- Dashboard cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-2">Total Training Data</h6>
+                            <h3 class="mb-0" id="total-data-count">
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <span>Loading...</span>
+                            </h3>
+                        </div>
+                        <i class="fas fa-database fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-2">Manual Entries</h6>
+                            <h3 class="mb-0" id="manual-count">
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <span>Loading...</span>
+                            </h3>
+                        </div>
+                        <i class="fas fa-keyboard fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-2">From Files</h6>
+                            <h3 class="mb-0" id="file-count">
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <span>Loading...</span>
+                            </h3>
+                        </div>
+                        <i class="fas fa-file-alt fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Data management -->
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-table me-2"></i>All Training Data
+                </h5>
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" class="form-control" placeholder="Search data..." id="search-data">
+                    <button class="btn btn-outline-secondary" type="button" title="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Tip:</strong> This page allows you to view, edit, and manage all your training data in one place. Use the search bar to quickly find specific data.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            <div id="data-table-container">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="text-muted">Loading training data...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Modal (will be created dynamically) -->
+<!-- Edit Modal (will be created dynamically) -->
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/data-management.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load data counts
+    fetch('/api/training/data')
+    .then(response => response.json())
+    .then(data => {
+        const totalCount = data.length;
+        document.getElementById('total-data-count').innerHTML = totalCount;
+        
+        const manualCount = data.filter(item => item.source_type === 'manual').length;
+        document.getElementById('manual-count').innerHTML = manualCount;
+        
+        const fileCount = data.filter(item => item.source_type === 'file').length;
+        document.getElementById('file-count').innerHTML = fileCount;
+    })
+    .catch(error => {
+        console.error('Error fetching training data:', error);
+        document.getElementById('total-data-count').innerHTML = '<span class="text-warning">Error</span>';
+        document.getElementById('manual-count').innerHTML = '<span class="text-warning">Error</span>';
+        document.getElementById('file-count').innerHTML = '<span class="text-warning">Error</span>';
+    });
+    
+    // Export functionality (example only)
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'export-data-btn') {
+            showAlert('Exporting training data... This would download a CSV file in a real implementation.', 'info');
+        }
+    });
+    
+    // Bulk delete functionality (example only)
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'bulk-delete-btn') {
+            if (confirm('Are you sure you want to delete all selected training data? This cannot be undone.')) {
+                showAlert('Bulk delete functionality would be implemented here.', 'warning');
+            }
+        }
+    });
+    
+    // Import functionality (example only)
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'import-data-btn') {
+            showAlert('Import functionality would allow uploading CSV or JSON files with training data.', 'info');
+        }
+    });
+});
+</script>
+{% endblock %}

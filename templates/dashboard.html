@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}لوحة التحكم - مؤسسة الحبيب الطبية{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4 text-end">مرحباً بك، {{ current_user.username }}!</h1>
+    
+    <!-- Overview cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 56px; height: 56px;">
+                        <i class="fab fa-telegram fa-2x text-white"></i>
+                    </div>
+                    <h5 class="card-title">عملاء تلجرام</h5>
+                    <h3 class="fw-bold">{{ telegram_users_count }}</h3>
+                    <a href="{{ url_for('chat.telegram_admin') }}" class="btn btn-sm btn-outline-primary mt-2">عرض التفاصيل</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 56px; height: 56px;">
+                        <i class="fas fa-comments fa-2x text-white"></i>
+                    </div>
+                    <h5 class="card-title">إجمالي الرسائل</h5>
+                    <h3 class="fw-bold">{{ total_messages }}</h3>
+                    <span class="text-muted small">رسائل متبادلة</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-info d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 56px; height: 56px;">
+                        <i class="fas fa-brain fa-2x text-white"></i>
+                    </div>
+                    <h5 class="card-title">بيانات التدريب</h5>
+                    <h3 class="fw-bold" id="training-count-val">...</h3>
+                    <a href="{{ url_for('training.training_page') }}" class="btn btn-sm btn-outline-info mt-2">إدارة البيانات</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 56px; height: 56px;">
+                        <i class="fas fa-file-alt fa-2x text-white"></i>
+                    </div>
+                    <h5 class="card-title">الملفات المرفوعة</h5>
+                    <h3 class="fw-bold" id="files-count-val">...</h3>
+                    <a href="{{ url_for('training.training_page') }}#file-upload" class="btn btn-sm btn-outline-warning mt-2">رفع ملفات</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Quick training -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 pt-4">
+                    <h5 class="mb-0 text-end"><i class="fas fa-magic text-success ms-2"></i>تدريب سريع للبوت</h5>
+                </div>
+                <div class="card-body">
+                    <form id="quick-training-form">
+                        <div class="mb-3 text-end">
+                            <label for="quick-question" class="form-label">السؤال</label>
+                            <input type="text" class="form-control text-end" id="quick-question" placeholder="أدخل السؤال المتوقع من العميل">
+                        </div>
+                        <div class="mb-3 text-end">
+                            <label for="quick-answer" class="form-label">الإجابة</label>
+                            <textarea class="form-control text-end" id="quick-answer" rows="3" placeholder="أدخل الإجابة التي سيقدمها البوت"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save ms-2"></i>حفظ بيانات التدريب
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Tips -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 pt-4">
+                    <h5 class="mb-0 text-end"><i class="fas fa-lightbulb text-warning ms-2"></i>نصائح ومميزات</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item bg-transparent text-end border-0 px-0 mb-2">
+                            <h6 class="mb-1 fw-bold">إدارة عملاء تلجرام</h6>
+                            <p class="mb-0 text-muted small">يمكنك الآن رؤية أرقام هواتف العملاء بمجرد مشاركتهم لها مع البوت.</p>
+                        </div>
+                        <div class="list-group-item bg-transparent text-end border-0 px-0 mb-2">
+                            <h6 class="mb-1 fw-bold">إشعارات المدير</h6>
+                            <p class="mb-0 text-muted small">قم بضبط معرف تلجرام الخاص بك في "تحكم تلجرام" لتصلك رسائل العملاء فوراً.</p>
+                        </div>
+                        <div class="list-group-item bg-transparent text-end border-0 px-0 mb-2">
+                            <h6 class="mb-1 fw-bold">تدريب الذكاء الاصطناعي</h6>
+                            <p class="mb-0 text-muted small">كلما أضفت بيانات أكثر، أصبح البوت أذكى في الرد على استفسارات مؤسسة الحبيب.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load training data count
+    fetch('/api/training/data')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('training-count-val').textContent = data.length;
+    });
+    
+    // Load files count
+    fetch('/api/training/files')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('files-count-val').textContent = data.length;
+    });
+    
+    // Handle quick training form submission
+    const quickTrainingForm = document.getElementById('quick-training-form');
+    if (quickTrainingForm) {
+        quickTrainingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const question = document.getElementById('quick-question').value.trim();
+            const answer = document.getElementById('quick-answer').value.trim();
+            
+            if (!question || !answer) {
+                return;
+            }
+            
+            fetch('/api/training/manual', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question, answer })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('quick-question').value = '';
+                document.getElementById('quick-answer').value = '';
+                alert('تم حفظ بيانات التدريب بنجاح!');
+                location.reload();
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

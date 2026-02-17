@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Training - Bank AI Assistant{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Train Your AI Assistant</h1>
+        <a href="{{ url_for('training.data_page') }}" class="btn btn-outline-primary">
+            <i class="fas fa-database me-2"></i>View All Training Data
+        </a>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card h-100 border-primary">
+                <div class="card-body text-center">
+                    <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Custom Training</h5>
+                    <p class="card-text">Train your AI with specific questions and answers.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card h-100 border-success">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-upload fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">File Upload</h5>
+                    <p class="card-text">Upload documents to extract training data.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card h-100 border-info">
+                <div class="card-body text-center">
+                    <i class="fas fa-sync-alt fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Real-time Learning</h5>
+                    <p class="card-text">AI learns from your conversations automatically.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card h-100 border-warning">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Improved Accuracy</h5>
+                    <p class="card-text">More training leads to better responses.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Training Tabs -->
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="training-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual" type="button" role="tab" aria-controls="manual" aria-selected="true">
+                        <i class="fas fa-keyboard me-2"></i>Manual Training
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="file-tab" data-bs-toggle="tab" data-bs-target="#file" type="button" role="tab" aria-controls="file" aria-selected="false">
+                        <i class="fas fa-file-upload me-2"></i>File Upload
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">
+                        <i class="fas fa-list me-2"></i>Your Training Data
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="training-tabs-content">
+                <!-- Manual Training Tab -->
+                <div class="tab-pane fade show active" id="manual" role="tabpanel" aria-labelledby="manual-tab">
+                    <h5 class="card-title">Add Question and Answer Pairs</h5>
+                    <p class="card-text text-muted">Create custom training data by providing specific questions and their corresponding answers.</p>
+                    
+                    <form id="manual-training-form" class="mt-4">
+                        <div class="mb-3">
+                            <label for="question-input" class="form-label">Question</label>
+                            <textarea class="form-control" id="question-input" rows="3" placeholder="Enter a banking or financial question"></textarea>
+                            <div class="form-text">Example: "What are the benefits of a savings account?"</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="answer-input" class="form-label">Answer</label>
+                            <textarea class="form-control" id="answer-input" rows="5" placeholder="Enter the detailed answer to the question"></textarea>
+                            <div class="form-text">Provide a comprehensive, accurate answer that the AI can learn from.</div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="reset" class="btn btn-outline-secondary">Clear</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Training Data
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- File Upload Tab -->
+                <div class="tab-pane fade" id="file" role="tabpanel" aria-labelledby="file-tab">
+                    <h5 class="card-title">Upload Training Files</h5>
+                    <p class="card-text text-muted">Upload text files with question-answer pairs to quickly add multiple training data entries.</p>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <h6><i class="fas fa-info-circle me-2"></i>File Format Guidelines</h6>
+                        <p class="mb-0">Files should be in text format (.txt) with each Q&A pair formatted as:</p>
+                        <pre class="mt-2 mb-0">Q: What is the minimum balance for a savings account?
+A: The minimum balance for a standard savings account is $100.</pre>
+                        <p class="mt-2 mb-0">Separate multiple Q&A pairs with a blank line.</p>
+                    </div>
+                    
+                    <div class="file-upload-container mt-4" id="drop-zone">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                        <h5>Drag & Drop Files Here</h5>
+                        <p class="text-muted">or</p>
+                        <form id="file-upload-form">
+                            <input type="file" id="file-input" class="d-none" accept=".txt,.pdf,.doc,.docx,.csv">
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+                                <i class="fas fa-file-upload me-2"></i>Select File
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div id="upload-status" class="mt-3 text-center"></div>
+                    
+                    <div class="mt-4">
+                        <h6>Uploaded Files</h6>
+                        <div id="training-files-container">
+                            <p class="text-center text-muted">Loading files...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Training Data Tab -->
+                <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title">Your Training Data</h5>
+                        <div class="input-group" style="max-width: 300px;">
+                            <input type="text" class="form-control form-control-sm" placeholder="Search training data" id="search-training-data">
+                            <button class="btn btn-outline-secondary btn-sm" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="training-data-container" class="mt-3">
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading training data...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/training.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Activate tab based on hash in URL
+    const hash = window.location.hash;
+    if (hash) {
+        const tab = document.querySelector(`[data-bs-target="${hash}"]`);
+        if (tab) {
+            const tabInstance = new bootstrap.Tab(tab);
+            tabInstance.show();
+        }
+    }
+    
+    // Search training data
+    const searchInput = document.getElementById('search-training-data');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            const dataCards = document.querySelectorAll('.data-card');
+            
+            dataCards.forEach(card => {
+                const question = card.querySelector('.question-text').textContent.toLowerCase();
+                const answer = card.querySelector('.answer-text').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    card.closest('.col-md-6').style.display = 'block';
+                } else {
+                    card.closest('.col-md-6').style.display = 'none';
+                }
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

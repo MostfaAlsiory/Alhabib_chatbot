@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+instance/
+*.db
+flask.log
+bot.log
+test_gemini.py
+test_ai_smart.py
+test_bot_engine.py
+test_bot_locally.py

@@ -1,0 +1,359 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Settings - {{ get_setting('app_name', 'Bank AI Assistant') }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Account Settings</h1>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Settings Menu</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                        <i class="fas fa-user me-2"></i>Profile
+                    </a>
+                    <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                        <i class="fas fa-lock me-2"></i>Security
+                    </a>
+                    <a href="#preferences" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                        <i class="fas fa-cog me-2"></i>Preferences
+                    </a>
+                    <a href="#data" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                        <i class="fas fa-database me-2"></i>Data Management
+                    </a>
+                    <a href="#app-customization" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                        <i class="fas fa-paint-brush me-2"></i>App Customization
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- Profile Section -->
+                <div class="tab-pane fade show active" id="profile">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Profile Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Update your account information and how your profile appears in the system.
+                            </div>
+
+                            <form id="update-profile-form" method="POST" action="{{ url_for('auth.settings') }}">
+                                <input type="hidden" name="action" value="update_profile">
+
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        value="{{ current_user.username }}" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" value="{{ current_user.email }}"
+                                        disabled>
+                                    <div class="form-text">Email address cannot be changed.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Account Created</label>
+                                    <p class="form-control-static">{{ current_user.created_at.strftime('%B %d, %Y') }}
+                                    </p>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Update Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Section -->
+                <div class="tab-pane fade" id="security">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Security Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                Keep your account secure by using a strong, unique password.
+                            </div>
+
+                            <form id="change-password-form" method="POST" action="{{ url_for('auth.settings') }}">
+                                <input type="hidden" name="action" value="change_password">
+
+                                <div class="mb-3">
+                                    <label for="current_password" class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="current_password"
+                                        name="current_password" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="new_password" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="new_password" name="new_password"
+                                        required minlength="8">
+                                    <div class="form-text">Password must be at least 8 characters long.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirm_password"
+                                        name="confirm_password" required>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-key me-2"></i>Change Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences Section -->
+                <div class="tab-pane fade" id="preferences">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Preferences</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Customize your experience with the AI Assistant.
+                            </div>
+
+                            <form id="preferences-form">
+                                <div class="mb-3">
+                                    <label class="form-label">Theme</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="theme" id="theme-dark"
+                                                value="dark" checked>
+                                            <label class="form-check-label" for="theme-dark">Dark</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="theme" id="theme-light"
+                                                value="light">
+                                            <label class="form-check-label" for="theme-light">Light</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="theme" id="theme-system"
+                                                value="system">
+                                            <label class="form-check-label" for="theme-system">System Default</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Notifications</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                        <label class="form-check-label" for="emailNotifications">Email
+                                            notifications</label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="language" class="form-label">Language</label>
+                                    <select class="form-select" id="language">
+                                        <option value="en-US" selected>English</option>
+                                        <option value="ar">العربية (Arabic)</option>
+                                        <option value="es">Español (Spanish)</option>
+                                        <option value="fr">Français (French)</option>
+                                        <option value="de">Deutsch (German)</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" id="save-preferences-btn" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Save Preferences
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App Customization Section -->
+                <div class="tab-pane fade" id="app-customization">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">App Customization</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-magic me-2"></i>
+                                Change the fixed texts of the application to make it dynamic for any purpose.
+                            </div>
+
+                            <form id="app-settings-form" method="POST" action="{{ url_for('auth.settings') }}">
+                                <input type="hidden" name="action" value="update_app_settings">
+
+                                <div class="mb-3">
+                                    <label for="app_name" class="form-label">Application Name</label>
+                                    <input type="text" class="form-control" id="app_name" name="app_name"
+                                        value="{{ app_name }}" required>
+                                    <div class="form-text">This will change the name in the navbar and title.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="welcome_msg" class="form-label">Welcome Message</label>
+                                    <textarea class="form-control" id="welcome_msg" name="welcome_msg" rows="3" required>{{ welcome_msg }}</textarea>
+                                    <div class="form-text">The default message shown in the chat.</div>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save me-2"></i>Save App Settings
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Management Section -->
+                <div class="tab-pane fade" id="data">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Data Management</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Warning:</strong> These actions cannot be undone.
+                            </div>
+
+
+                            <div class="mb-4">
+                                <h6>Clear Conversation History</h6>
+                                <p>Remove all of your conversation history with the AI Assistant.</p>
+                                <button type="button" id="clear-conversations" class="btn btn-outline-warning">
+                                    <i class="fas fa-eraser me-2"></i>Clear All Conversations
+                                </button>
+                            </div>
+
+                            <div>
+                                <h6>Delete Account</h6>
+                                <p>Permanently delete your account and all associated data.</p>
+                                <button type="button" id="delete-account" class="btn btn-outline-danger">
+                                    <i class="fas fa-user-slash me-2"></i>Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle between tabs based on URL hash
+        const hash = window.location.hash;
+        if (hash) {
+            const tab = document.querySelector(`a[href="${hash}"]`);
+            if (tab) {
+                tab.click();
+            }
+        }
+
+        // Save preferences
+        const savePreferencesBtn = document.getElementById('save-preferences-btn');
+        if (savePreferencesBtn) {
+            savePreferencesBtn.addEventListener('click', function () {
+                // Get theme preference
+                const themeValue = document.querySelector('input[name="theme"]:checked').value;
+
+                // Save to localStorage
+                const newTheme = themeValue === 'dark' ? 'dark' : 'light';
+                localStorage.setItem('darkMode', newTheme);
+                console.log("Saved theme preference:", newTheme);
+
+                // Apply theme
+                document.documentElement.setAttribute('data-bs-theme', newTheme);
+
+                // Update toggle text in navbar
+                const darkModeToggle = document.getElementById('dark-mode-toggle');
+                if (darkModeToggle) {
+                    darkModeToggle.innerHTML = newTheme === 'dark'
+                        ? '<i class="fas fa-sun me-2"></i>Light Mode'
+                        : '<i class="fas fa-moon me-2"></i>Dark Mode';
+                }
+
+                // Save language preference
+                const languageValue = document.getElementById('language').value;
+                localStorage.setItem('userLanguage', languageValue);
+                console.log("Saved language preference:", languageValue);
+
+                showAlert('Preferences saved successfully!', 'success');
+
+                // Reload page to apply all changes
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            });
+        }
+
+        // Project download is handled directly by the href link
+
+        // Clear conversations
+        const clearConversationsBtn = document.getElementById('clear-conversations');
+        if (clearConversationsBtn) {
+            clearConversationsBtn.addEventListener('click', function () {
+                if (confirm('Are you sure you want to clear all your conversations? This action cannot be undone.')) {
+                    showAlert('This would clear all conversations in a real implementation.', 'warning');
+                }
+            });
+        }
+
+        // Delete account
+        const deleteAccountBtn = document.getElementById('delete-account');
+        if (deleteAccountBtn) {
+            deleteAccountBtn.addEventListener('click', function () {
+                if (confirm('WARNING: Are you absolutely sure you want to delete your account? This will permanently erase all your data and cannot be undone.')) {
+                    showAlert('This would delete your account in a real implementation.', 'danger');
+                }
+            });
+        }
+
+        // Initialize theme radio based on current setting
+        const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+        if (currentTheme === 'dark') {
+            document.getElementById('theme-dark').checked = true;
+        } else {
+            document.getElementById('theme-light').checked = true;
+        }
+
+        // Initialize language selector based on saved preference
+        const savedLanguage = localStorage.getItem('userLanguage');
+        if (savedLanguage) {
+            const languageSelect = document.getElementById('language');
+            if (languageSelect) {
+                // Try to find the option with matching value
+                const option = Array.from(languageSelect.options).find(opt => opt.value === savedLanguage);
+                if (option) {
+                    languageSelect.value = savedLanguage;
+                    console.log("Set language from localStorage:", savedLanguage);
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
