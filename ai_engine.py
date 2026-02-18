@@ -7,25 +7,17 @@ import time
 
 logger = logging.getLogger(__name__)
 
-# Gemini API Configuration from Environment Variables
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-def get_api_urls():
-    key = os.getenv("GEMINI_API_KEY", "")
-    # Primary model (2.5 Flash)
-    gemini_25_url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={key}"
-    # Fallback model (1.5 Flash)
-    gemini_15_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={key}"
-    return gemini_25_url, gemini_15_url
+# Gemini API Configuration
+GEMINI_API_KEY = "AIzaSyCbOBXOM4VpGlXZKiTs9iu38xubGxx0yqk"
+# Primary model (2.5 Flash)
+GEMINI_25_URL = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+# Fallback model (1.5 Flash)
+GEMINI_15_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
 
 def generate_ai_response(user_message, history=None):
     """
     Generate an AI response using Gemini API with context awareness and fallback mechanism.
     """
-    if not os.getenv("GEMINI_API_KEY"):
-        logger.error("GEMINI_API_KEY is not set in environment variables")
-        return "عذراً، لم يتم إعداد مفتاح API الخاص بالذكاء الاصطناعي بشكل صحيح."
-
     context_text = ""
     try:
         from models import TrainingData
@@ -89,16 +81,15 @@ def generate_ai_response(user_message, history=None):
     }
     
     headers = {"Content-Type": "application/json"}
-    gemini_25_url, gemini_15_url = get_api_urls()
 
     try:
         logger.info(f"Attempting to generate response for: {user_message[:50]}...")
         session = requests.Session()
-        response = session.post(gemini_25_url, headers=headers, data=json.dumps(payload), timeout=60)
+        response = session.post(GEMINI_25_URL, headers=headers, data=json.dumps(payload), timeout=60)
         
         if response.status_code == 429:
             logger.warning("Gemini 2.5 Flash Rate Limit. Switching to Fallback (1.5 Flash)...")
-            response = session.post(gemini_15_url, headers=headers, data=json.dumps(payload), timeout=60)
+            response = session.post(GEMINI_15_URL, headers=headers, data=json.dumps(payload), timeout=60)
         
         if not response.ok:
             logger.error(f"Gemini API Error ({response.status_code}): {response.text}")
