@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger(__name__)
 
 # Telegram Bot Token
-TELEGRAM_TOKEN = "6571793763:AAFJlDbgGEnOeD_ctbIrujAdYgLb7ObMo7A"
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "6571793763:AAFJlDbgGEnOeD_ctbIrujAdYgLb7ObMo7A")
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
 
 def get_updates(offset=None):

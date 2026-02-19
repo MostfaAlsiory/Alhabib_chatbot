@@ -14,8 +14,11 @@ def create_app():
     app.secret_key = os.environ.get("SESSION_SECRET", "dev_secret_key")
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-    # PostgreSQL connection for Render
-    db_url = "postgresql://ai_dnxw_user:Nqh4tL5dIdBX4UwtrZD9FaWuYSWgUsbO@dpg-d668lm75r7bs73cdfqqg-a.oregon-postgres.render.com/ai_dnxw"
+    # Database connection for Render
+    # Default fallback to the previous hardcoded URL for backward compatibility if not provided in environment
+    default_db_url = "postgresql://ai_dnxw_user:Nqh4tL5dIdBX4UwtrZD9FaWuYSWgUsbO@dpg-d668lm75r7bs73cdfqqg-a.oregon-postgres.render.com/ai_dnxw"
+    db_url = os.environ.get("DATABASE_URL", default_db_url)
+    
     # SQLAlchemy requires postgresql:// instead of postgres://
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)

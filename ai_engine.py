@@ -8,7 +8,7 @@ import time
 logger = logging.getLogger(__name__)
 
 # Gemini API Configuration
-GEMINI_API_KEY = "AIzaSyAGyzDmw9f1w-c3HM-yeUCQPVXKIJHVh_s"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyAGyzDmw9f1w-c3HM-yeUCQPVXKIJHVh_s")
 # Primary model (2.5 Flash)
 GEMINI_25_URL = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
 # Fallback model (1.5 Flash)
